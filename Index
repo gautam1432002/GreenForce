@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neighborhood Issue Reporting</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            padding: 1.5rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            color: #ecf0f1;
+            font-size: 1.8rem;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .nav-item {
+            color: #ecf0f1;
+            text-decoration: none;
+            font-size: 1.1rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #3498db;
+            transition: width 0.3s ease;
+        }
+
+        .nav-item:hover::after {
+            width: 100%;
+        }
+
+        .nav-item:hover {
+            color: #3498db;
+        }
+
+        /* Hero Section with Animation */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 4rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .hero-content {
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(50px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero-button {
+            background: #3498db;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .hero-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+            background: #2980b9;
+        }
+
+        /* Auth Section */
+        .auth-section {
+            max-width: 600px;
+            margin: 4rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 2rem;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            background: #f4f4f4;
+            border-radius: 10px 10px 0 0;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: #3498db;
+            color: white;
+        }
+
+        .tab:hover:not(.active) {
+            background: #e0e0e0;
+        }
+
+        .form-container {
+            padding: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        .error {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            position: absolute;
+            bottom: -20px;
+            display: none;
+        }
+
+        .auth-button {
+            width: 100%;
+            padding: 1rem;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .auth-button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            background: #2c3e50;
+            color: #ecf0f1;
+            text-align: center;
+            padding: 1.5rem;
+            width: 100%;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            .nav-menu {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .auth-section {
+                margin: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-brand">Neighborhood Issue Reporting</a>
+            <div class="nav-menu">
+                <a href="#" class="nav-item">Home</a>
+                <a href="#" class="nav-item">Report an Issue</a>
+                <a href="#" class="nav-item">Issue Status</a>
+                <a href="#" class="nav-item">Admin Panel</a>
+                <a href="#" class="nav-item">Login/Signup</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Report local issues and track their resolution</h1>
+            <button class="hero-button" onclick="location.href='#report'">Report an Issue</button>
+        </div>
+    </section>
+
+    <section class="auth-section">
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('login')">Login</div>
+            <div class="tab" onclick="showTab('signup')">Signup</div>
+        </div>
+
+        <div class="form-container">
+            <form id="login-form" class="active">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="login-email" required>
+                    <span class="error" id="login-email-error">Please enter a valid email</span>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="login-password" required>
+                    <span class="error" id="login-password-error">Password is required</span>
+                </div>
+                <button type="submit" class="auth-button">Login</button>
+            </form>
+
+            <form id="signup-form" style="display: none;">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="signup-name" required>
+                    <span class="error" id="signup-name-error">Name is required</span>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="signup-email" required>
+                    <span class="error" id="signup-email-error">Please enter a valid email</span>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="signup-password" required>
+                    <span class="error" id="signup-password-error">Password must be at least 6 characters</span>
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <input type="password" id="signup-confirm" required>
+                    <span class="error" id="signup-confirm-error">Passwords do not match</span>
+                </div>
+                <button type="submit" class="auth-button">Signup</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 Neighborhood Issue Reporting</p>
+    </footer>
+
+    <script>
+        function showTab(tabName) {
+            const tabs = document.querySelectorAll('.tab');
+            const forms = document.querySelectorAll('.form-container form');
+
+            tabs.forEach(tab => tab.classList.remove('active'));
+            forms.forEach(form => form.style.display = 'none');
+
+            document.querySelector(`.${tabName === 'login' ? 'tab:first-child' : 'tab:last-child'}`).classList.add('active');
+            document.getElementById(`${tabName}-form`).style.display = 'block';
+        }
+
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            let valid = true;
+
+            document.querySelectorAll('.error').forEach(err => err.style.display = 'none');
+
+            if (!email.match(/^[\w-]+@([\w-]+\.)+[\w-]{2,4}$/)) {
+                document.getElementById('login-email-error').style.display = 'block';
+                valid = false;
+            }
+            if (!password) {
+                document.getElementById('login-password-error').style.display = 'block';
+                valid = false;
+            }
+            if (valid) alert('Login successful!');
+        });
+
+        document.getElementById('signup-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const confirm = document.getElementById('signup-confirm').value;
+            let valid = true;
+
+            document.querySelectorAll('.error').forEach(err => err.style.display = 'none');
+
+            if (!name) {
+                document.getElementById('signup-name-error').style.display = 'block';
+                valid = false;
+            }
+            if (!email.match(/^[\w-]+@([\w-]+\.)+[\w-]{2,4}$/)) {
+                document.getElementById('signup-email-error').style.display = 'block';
+                valid = false;
+            }
+            if (password.length < 6) {
+                document.getElementById('signup-password-error').style.display = 'block';
+                valid = false;
+            }
+            if (password !== confirm) {
+                document.getElementById('signup-confirm-error').style.display = 'block';
+                valid = false;
+            }
+            if (valid) alert('Signup successful!');
+        });
+    </script>
+</body>
+</html>
